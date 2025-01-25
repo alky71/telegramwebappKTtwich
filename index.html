@@ -21,23 +21,26 @@
         .balance-box {
             position: fixed;
             right: 10px;
-            bottom: 60px;
+            top: 50px;
             padding: 10px;
             border: 2px solid #9146FF;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 20px;
             background-color: #222;
         }
         .action-button {
             position: fixed;
             left: 10px;
-            bottom: 60px;
+            top: 50px;
             width: 50px;
             height: 50px;
-            background: url('https://img.icons8.com/ios-filled/50/ffffff/like.png') no-repeat center;
+            background: url('https://img.icons8.com/ios-filled/50/ffffff/fire-element.png') no-repeat center;
             background-size: contain;
             cursor: pointer;
             transition: transform 0.2s;
+            outline: none;
+            border: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .action-button:active {
             transform: scale(0.9);
@@ -56,6 +59,9 @@
             text-align: center;
             color: #fff;
             cursor: pointer;
+            outline: none;
+            border: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .menu-item img {
             width: 30px;
@@ -67,10 +73,14 @@
             padding: 20px;
         }
         .profile-section img {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             margin-bottom: 10px;
+        }
+        .profile-balance {
+            font-size: 28px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -93,7 +103,7 @@
     <div class="profile-section" id="profile">
         <img id="user-photo" src="" alt="Avatar">
         <h2 id="user-name">Ім'я користувача</h2>
-        <div class="balance-box" id="profile-balance">Баланс: завантаження...</div>
+        <div class="profile-balance" id="profile-balance">Баланс: завантаження...</div>
     </div>
 
     <script>
