@@ -29,10 +29,23 @@
       padding: 8px 16px;
       cursor: pointer;
     }
+    .star-tabs button.active {
+      text-decoration: underline;
+    }
+    .slot-container {
+      position: relative;
+      width: 300px;
+      height: 100px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
     .slot-row {
       display: flex;
-      justify-content: center;
-      margin-bottom: 16px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: transform 0.5s ease-in-out;
+      width: max-content;
     }
     .slot-item {
       background: #1f1f1f;
@@ -42,6 +55,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-width: 80px;
+    }
+    .slot-pointer {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
     }
     .star-cost {
       color: #ffd700;
@@ -61,16 +82,21 @@
       font-size: 16px;
       cursor: pointer;
       margin-bottom: 16px;
+      outline: none;
+    }
+    .play-button:focus {
+      outline: none;
     }
     .prizes-section {
       width: 100%;
     }
-    .prize-row {
+    .prizes-scroll {
       display: flex;
-      justify-content: center;
-      margin-top: 12px;
+      overflow-x: auto;
+      padding-bottom: 16px;
     }
     .prize-item {
+      flex: 0 0 auto;
       background: #1f1f1f;
       padding: 12px;
       margin: 0 8px;
@@ -78,6 +104,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-width: 80px;
     }
     .tabs {
       position: fixed;
@@ -96,23 +123,22 @@
 </head>
 <body>
   <div class="star-tabs">
-    <button>25 ✨</button>
-    <button>50 ✨</button>
-    <button>100 ✨</button>
+    <button onclick="setCost(25)" class="active">25 ✨</button>
+    <button onclick="setCost(50)">50 ✨</button>
+    <button onclick="setCost(100)">100 ✨</button>
   </div>
 
-  <div class="slot-row">
-    <div class="slot-item">
-      <div>🎁</div>
-      <div class="star-cost">25 ✨</div>
-    </div>
-    <div class="slot-item">
-      <div>💖</div>
-      <div class="star-cost">15 ✨</div>
-    </div>
-    <div class="slot-item">
-      <div>🌹</div>
-      <div class="star-cost">25 ✨</div>
+  <div class="slot-container">
+    <div class="slot-pointer">▼</div>
+    <div id="slotRow" class="slot-row">
+      <div class="slot-item">🎁<div class="star-cost">25 ✨</div></div>
+      <div class="slot-item">💖<div class="star-cost">15 ✨</div></div>
+      <div class="slot-item">🌹<div class="star-cost">25 ✨</div></div>
+      <div class="slot-item">🌺<div class="star-cost">50 ✨</div></div>
+      <div class="slot-item">🚀<div class="star-cost">50 ✨</div></div>
+      <div class="slot-item">🏆<div class="star-cost">100 ✨</div></div>
+      <div class="slot-item">💎<div class="star-cost">100 ✨</div></div>
+      <div class="slot-item">🎂<div class="star-cost">50 ✨</div></div>
     </div>
   </div>
 
@@ -121,33 +147,20 @@
     <input type="checkbox" id="demoMode">
   </div>
 
-  <button class="play-button">Мені пощастить! 25 ✨</button>
+  <button id="playBtn" class="play-button" onclick="spin()">Мені пощастить! 25 ✨</button>
 
   <div class="prizes-section">
     <h3>Ви можете виграти...</h3>
-    <div class="prize-row">
-      <div class="prize-item">
-        <div>0.806% 🎲</div>
-        <div>🏆</div>
-        <div class="star-cost">100 ✨</div>
-      </div>
-      <div class="prize-item">
-        <div>25% 🎲</div>
-        <div>🌹</div>
-        <div class="star-cost">25 ✨</div>
-      </div>
-      <div class="prize-item">
-        <div>1.21% 🎲</div>
-        <div>🎂</div>
-        <div class="star-cost">50 ✨</div>
-      </div>
+    <div class="prizes-scroll">
+      <div class="prize-item">12% 🎲<br>🌺<br><div class="star-cost">50 ✨</div></div>
+      <div class="prize-item">10% 🎲<br>🚀<br><div class="star-cost">50 ✨</div></div>
+      <div class="prize-item">8% 🎲<br>🎁<br><div class="star-cost">25 ✨</div></div>
+      <div class="prize-item">15% 🎲<br>💎<br><div class="star-cost">100 ✨</div></div>
+      <div class="prize-item">10% 🎲<br>💖<br><div class="star-cost">15 ✨</div></div>
     </div>
   </div>
 
   <div class="tabs">
-    <div class="tab-item">
-      🌐<br>Лідери
-    </div>
     <div class="tab-item">
       🎲<br>Грати
     </div>
@@ -155,5 +168,23 @@
       👤<br>Профіль
     </div>
   </div>
+
+  <script>
+    let currentCost = 25;
+    function setCost(value) {
+      currentCost = value;
+      document.querySelectorAll('.star-tabs button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('playBtn').innerText = `Мені пощастить! ${value} ✨`;
+    }
+
+    function spin() {
+      const slotRow = document.getElementById('slotRow');
+      const itemWidth = slotRow.children[0].offsetWidth + 16;
+      const randomIndex = Math.floor(Math.random() * slotRow.children.length);
+      const offset = itemWidth * randomIndex;
+      slotRow.style.transform = `translateX(-${offset - 110}px)`;
+    }
+  </script>
 </body>
 </html>
