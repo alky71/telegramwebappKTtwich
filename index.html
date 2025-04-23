@@ -35,16 +35,16 @@
     .slot-container {
       position: relative;
       width: 300px;
-      height: 100px;
+      height: 140px;
       overflow: hidden;
       margin-bottom: 16px;
     }
     .slot-row {
       display: flex;
       position: absolute;
-      top: 0;
+      top: 24px;
       left: 0;
-      transition: transform 0.5s ease-in-out;
+      transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1);
       width: max-content;
     }
     .slot-item {
@@ -55,23 +55,23 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 80px;
+      min-width: 100px;
+    }
+    .slot-item img {
+      width: 48px;
+      height: 48px;
     }
     .slot-pointer {
       position: absolute;
-      top: -12px;
+      top: 0;
       left: 50%;
       transform: translateX(-50%);
       font-size: 24px;
+      z-index: 2;
     }
     .star-cost {
       color: #ffd700;
       margin-top: 6px;
-    }
-    .demo-toggle {
-      margin: 8px 0;
-      display: flex;
-      align-items: center;
     }
     .play-button {
       background: #7289da;
@@ -104,7 +104,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 80px;
+      min-width: 100px;
+    }
+    .prize-item img {
+      width: 48px;
+      height: 48px;
     }
     .tabs {
       position: fixed;
@@ -118,6 +122,7 @@
     .tab-item {
       text-align: center;
       color: white;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -131,20 +136,15 @@
   <div class="slot-container">
     <div class="slot-pointer">▼</div>
     <div id="slotRow" class="slot-row">
-      <div class="slot-item">🎁<div class="star-cost">25 ✨</div></div>
-      <div class="slot-item">💖<div class="star-cost">15 ✨</div></div>
-      <div class="slot-item">🌹<div class="star-cost">25 ✨</div></div>
-      <div class="slot-item">🌺<div class="star-cost">50 ✨</div></div>
-      <div class="slot-item">🚀<div class="star-cost">50 ✨</div></div>
-      <div class="slot-item">🏆<div class="star-cost">100 ✨</div></div>
-      <div class="slot-item">💎<div class="star-cost">100 ✨</div></div>
-      <div class="slot-item">🎂<div class="star-cost">50 ✨</div></div>
+      <div class="slot-item"><img src="gift.png"><div class="star-cost">25 ✨</div></div>
+      <div class="slot-item"><img src="heart.png"><div class="star-cost">15 ✨</div></div>
+      <div class="slot-item"><img src="rose.png"><div class="star-cost">25 ✨</div></div>
+      <div class="slot-item"><img src="bouquet.png"><div class="star-cost">50 ✨</div></div>
+      <div class="slot-item"><img src="rocket.png"><div class="star-cost">50 ✨</div></div>
+      <div class="slot-item"><img src="trophy.png"><div class="star-cost">100 ✨</div></div>
+      <div class="slot-item"><img src="diamond.png"><div class="star-cost">100 ✨</div></div>
+      <div class="slot-item"><img src="cake.png"><div class="star-cost">50 ✨</div></div>
     </div>
-  </div>
-
-  <div class="demo-toggle">
-    <label for="demoMode">Демо режим</label>
-    <input type="checkbox" id="demoMode">
   </div>
 
   <button id="playBtn" class="play-button" onclick="spin()">Мені пощастить! 25 ✨</button>
@@ -152,19 +152,19 @@
   <div class="prizes-section">
     <h3>Ви можете виграти...</h3>
     <div class="prizes-scroll">
-      <div class="prize-item">12% 🎲<br>🌺<br><div class="star-cost">50 ✨</div></div>
-      <div class="prize-item">10% 🎲<br>🚀<br><div class="star-cost">50 ✨</div></div>
-      <div class="prize-item">8% 🎲<br>🎁<br><div class="star-cost">25 ✨</div></div>
-      <div class="prize-item">15% 🎲<br>💎<br><div class="star-cost">100 ✨</div></div>
-      <div class="prize-item">10% 🎲<br>💖<br><div class="star-cost">15 ✨</div></div>
+      <div class="prize-item">14% 🎲<br><img src="bouquet.png"><div class="star-cost">50 ✨</div></div>
+      <div class="prize-item">13% 🎲<br><img src="rocket.png"><div class="star-cost">50 ✨</div></div>
+      <div class="prize-item">12% 🎲<br><img src="gift.png"><div class="star-cost">25 ✨</div></div>
+      <div class="prize-item">18% 🎲<br><img src="diamond.png"><div class="star-cost">100 ✨</div></div>
+      <div class="prize-item">11% 🎲<br><img src="heart.png"><div class="star-cost">15 ✨</div></div>
     </div>
   </div>
 
   <div class="tabs">
-    <div class="tab-item">
+    <div class="tab-item" onclick="showTab('game')">
       🎲<br>Грати
     </div>
-    <div class="tab-item">
+    <div class="tab-item" onclick="showTab('profile')">
       👤<br>Профіль
     </div>
   </div>
@@ -182,8 +182,15 @@
       const slotRow = document.getElementById('slotRow');
       const itemWidth = slotRow.children[0].offsetWidth + 16;
       const randomIndex = Math.floor(Math.random() * slotRow.children.length);
-      const offset = itemWidth * randomIndex;
-      slotRow.style.transform = `translateX(-${offset - 110}px)`;
+      const offset = itemWidth * randomIndex + Math.floor(Math.random() * itemWidth / 2);
+      slotRow.style.transition = 'transform 2s cubic-bezier(0.22, 1, 0.36, 1)';
+      slotRow.style.transform = `translateX(-${offset}px)`;
+      // TODO: trigger fireworks here
+    }
+
+    function showTab(tab) {
+      // TODO: toggle visibility of game/profile tabs
+      alert(`Перемикання на вкладку: ${tab}`);
     }
   </script>
 </body>
